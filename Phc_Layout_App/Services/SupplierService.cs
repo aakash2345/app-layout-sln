@@ -24,18 +24,13 @@ namespace Phc_Layout.Services
             return this.SupplierCollections(id);
 
         }
-        #endregion
-
-        #region 'Public Method'
 
         public List<SupplierAddressModel> GetSupplierAddressCollection(String id)
         {
             return this.SupplierAddressCollections(id);
 
         }
-        #endregion
 
-        #region 'Public Method'
 
         public List<DivisionsLocationOption> GetDivisionLocationCollections(String webId, String masterId)
         {
@@ -46,7 +41,7 @@ namespace Phc_Layout.Services
 
         #region 'Private Method'
 
-        public List<SupplierOption> SupplierCollections(String id)
+         List<SupplierOption> SupplierCollections(String id)
         {
             List<SupplierOption> supplierOptions = null;
             try
@@ -67,9 +62,7 @@ namespace Phc_Layout.Services
             return supplierOptions;
 
         }
-        #endregion
 
-        #region
         List<DivisionsLocationOption> DivisionLocationCollections(String webId, String masterId)
         {
             List<DivisionsLocationOption> divisionLocationOptions = null;
@@ -100,15 +93,14 @@ namespace Phc_Layout.Services
             return divisionLocationOptions;
 
         }
-        #endregion
 
-        #region
-        public List<SupplierAddressModel> SupplierAddressCollections(String masterId)
+         List<SupplierAddressModel> SupplierAddressCollections(String masterId)
         {
 
             List<SupplierAddressModel> supplierAddressOptions = null;
             try
             {
+                
                 String response = this._httpOperations.GetRequest("Supplier/GetSuppliersAddress", masterId).ToString();
 
                 if (!String.IsNullOrWhiteSpace(response))

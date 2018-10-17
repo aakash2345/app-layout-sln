@@ -33,13 +33,24 @@ namespace Phc_Layout.Controllers
             return Json(supplierOptions);
         }
 
-        public JsonResult GetSuppliersAddress(string masterId)
-        {
-            
-            List<SupplierAddressModel> supplierAddressOptions = this._supplierService.GetSupplierAddressCollection("507981");
+        //public JsonResult GetSuppliersAddress(string masterId)
+        //{
+        //    List<DataAddress> addressItem = new List<DataAddress>();
+        //    List<SupplierAddressModel> supplierAddressOptions = this._supplierService.GetSupplierAddressCollection(masterId);
 
-            return Json(supplierAddressOptions);
-        }
+        //    var addressData = (from sa in supplierAddressOptions select sa.SupplierOrganizationId).Distinct();
+
+        //    foreach (var item in addressData)
+        //    {
+        //        var data = supplierAddressOptions.FirstOrDefault(cond => cond.SupplierOrganizationId == masterId);
+        //        DataAddress addressItem = new DataAddress
+        //        {
+        //            TextBox = data.SupplierOrganizationId
+        //        }
+        //    }
+
+        //    return Json(DataAddress);
+        //}
 
 
         public JsonResult GetDivisionLocation(String id)
@@ -49,7 +60,6 @@ namespace Phc_Layout.Controllers
             var data = (from m in divisionLocationOptions
                         select m.masterId).Distinct();
 
-
             foreach (var itemTop in data)
             {
                 var data1 = divisionLocationOptions.FirstOrDefault(cond => cond.masterId == itemTop);
@@ -57,7 +67,8 @@ namespace Phc_Layout.Controllers
                 RootObject rootObject = new RootObject
                 {
                     text = data1.parkerDivName,
-                    expanded = false
+                    expanded = false,
+                    checkAll = false
                 };
 
                 var data2 = divisionLocationOptions.Where(cond => cond.masterId == itemTop);

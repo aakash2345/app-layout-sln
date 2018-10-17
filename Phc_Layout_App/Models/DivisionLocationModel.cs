@@ -31,6 +31,7 @@ namespace Phc_Layout.Models
     {
         public string text { get; set; }
         public bool expanded { get; set; }
+        public bool checkAll { get; set; }
         public List<Item> items { get; set; }
     }
 }
