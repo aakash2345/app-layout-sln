@@ -1,0 +1,506 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+}
+@using Kendo.Mvc.UI
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title PHconnect</title>
+    <environment include="Development">
+
+        @*<link rel="stylesheet" type="text/css" href="https://localhost:44331/lib/bootstrap-4.0.0/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="https://localhost:44331/lib/font-awesome/css/font-awesome.css" />
+        <link rel="stylesheet" type="text/css" href="https://localhost:44331/lib/kendo-ui/styles/kendo.common-bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="https://localhost:44331/lib/kendo-ui/styles/kendo.bootstrap.min.css" />*@
+        <link rel="stylesheet" type="text/css" href="https://localhost:44331/css/app-min-styles.css" />
+        <link rel="ICON" href="~/favicon.ico" type="image/ico" />
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" asp-append-version="true"></script>
+        @*<script type="text/javascript" src="https://localhost:44331/lib/jquery/dist/jquery.js" asp-append-version="true"></script>*@
+        <script type="text/javascript" src="https://localhost:44331/lib/popper/popper.js" asp-append-version="true"></script>
+        <script type="text/javascript" src="https://localhost:44331/lib/bootstrap-4.0.0/dist/js/bootstrap.js" asp-append-version="true"></script>
+        @* Place Kendo UI scripts after jQuery *@
+        <script type="text/javascript" src="https://localhost:44331/lib/kendo-ui/js/kendo.all.min.js"></script>
+        <script type="text/javascript" src="https://localhost:44331/lib/kendo-ui/js/kendo.aspnetmvc.min.js"></script>
+    </environment>
+    <environment exclude="Development">
+        @*<link rel="stylesheet" type="text/css" href="/Phc_Styles/lib/bootstrap-4.0.0/dist/css/bootstrap.css" />
+            <link rel="stylesheet" type="text/css" href="/Phc_Styles/lib/kendo-ui/styles/kendo.common-bootstrap.min.css" />
+            <link rel="stylesheet" type="text/css" href="/Phc_Styles/lib/kendo-ui/styles/kendo.bootstrap.min.css" />
+            <link rel="stylesheet" href="/Phc_Styles/lib/font-awesome/css/font-awesome.css" />*@
+        <link rel="stylesheet" type="text/css" href="/Phc_Styles/css/app-min-styles.css" />
+        <link rel="ICON" href="~/favicon.ico" type="image/ico" />
+        <script type="text/javascript" src="/Phc_Styles/lib/jquery/dist/jquery.js" asp-append-version="true"></script>
+        <script type="text/javascript" src="/Phc_Styles/lib/popper/popper.js" asp-append-version="true"></script>
+        <script type="text/javascript" src="/Phc_Styles/lib/bootstrap-4.0.0/dist/js/bootstrap.js" asp-append-version="true"></script>
+        @* Place Kendo UI scripts after jQuery *@
+        <script type="text/javascript" src="/Phc_Styles/lib/kendo-ui/js/kendo.all.min.js"></script>
+        <script type="text/javascript" src="/Phc_Styles/lib/kendo-ui/js/kendo.aspnetmvc.min.js"></script>
+    </environment>
+    <script type="text/javascript">
+        
+        //var sampleData = new kendo.data.HierarchicalDataSource({
+        //    transport: {
+        //        read: {
+        //            url: " https://demos.telerik.com/kendo-ui/service/Employees",
+        //            dataType: "jsonp"
+        //        }
+        //    },
+        //    change: function (e) {
+        //        if (e.checked = true) {
+        //            console.log('checked')
+        //        }
+        //        console.log(e.node);
+        //    },
+        //    schema: {
+        //        model: {
+        //            id: "EmployeeId",
+        //            hasChildren: "HasEmployees"
+        //        }
+        //    }
+        //});
+        
+        //$(document).ready(function () {
+        //    $("#dropdowntree").kendoDropDownTree({
+        //        placeholder: "Select Divisions/ Locations",
+        //        height: "auto",
+
+        //        checkboxes: true,
+        //        checkAll: true,
+        //        dataSource: sampleData,
+        //        dataTextField: "FullName",
+        //        //change: onSelect
+        //    });
+        //});
+        var masterId = '';
+        function onSelect(e) {
+            masterId = $('#supplier-dropdown').val();
+            var url = '@Url.Action("GetDivisionLocation", "Home")' + '/' + masterId;
+            $.get(url, function (response) {
+                var dropdowntree = $("#dropdowntree").data("kendoDropDownTree");
+                dropdowntree.setDataSource(response);
+                //dropdowntree.destroy();
+                //$("#dropdowntree").remove();
+                // create kendoDropDownTree from input HTML element
+                //$("#dropdowntree").kendoDropDownTree({
+                //    placeholder: "Select ...",
+                //    height: "auto",
+                //    checkboxes: true,
+                //    checkAll: true,
+                //    autoClose: false,
+                //    dataSource: response,
+                //    dataTextField: "parkerLocName",
+                //    dataValueField: "parkerDivId"
+                //});             
+            });
+        }
+
+        function additionalInfo() {
+            return {
+                masterId: masterId
+            }
+        }
+        
+    </script>
+</head>
+<body class="layout-body fixed-navbar">
+    <div class="page-wrapper">
+        <!-- START HEADER-->
+        <header class="header">
+            <a class="nav-link sidebar-toggler" id="sidebarToggle"><i class="fa fa-bars"></i></a>
+            <div class="page-brand img-fluid">
+                <img class="parker-logo" src="~/images/logo-black-cmyk.jpg">
+                <span class="additional-logo-caption">
+                    Supplier Portal
+                </span>
+            </div>
+            <ul class="nav navbar-toolbar layout-dropdowns">
+
+                <li class="user-selection-dropdown">
+                    <div class="form-group nav-form-group">
+                        <label class="nav-label">Supplier</label>
+                        <div>
+                             @(Html.Kendo().DropDownList()
+                            .Name("supplier-dropdown")
+                            .DataTextField("SupplierOrganizationName")
+                            .DataValueField("MasterId")
+                            .ValueTemplate("<text><span>#: data.MasterId #</span> - <span>#: data.SupplierOrganizationName #</span></text>")
+                            .Template("<text><span>#: data.MasterId #</span> - <span>#: data.SupplierOrganizationName #</span></text>")
+                            .Events(e => {
+                                e.Change("onSelect");
+                            })
+                            .DataSource(source => { source.Read(read => {
+                                read.Action("GetSuppliers", "Home");
+                            });
+
+                            }).OptionLabel("Select Supplier...").HtmlAttributes(new { @class = "nav-supplier-dropdown" }))
+                        </div>
+                        <small id="emailHelp" class="form-text text-muted">3602 West 23rd Street Erie, PA 16505</small>
+                    </div>
+
+                </li>
+                <li class="user-selection-dropdown">
+                    <div class="form-group nav-form-group">
+                        <label class="nav-label">Division/ Location</label>
+                        <div class="">
+                            <input id="dropdowntree" class = "nav-supplier-dropdown icon-placeholder" style="width: 200px;" />
+
+                            @*@(Html.Kendo().DropDownTree()
+                        .AutoWidth(true)
+                        .Height("auto")
+                        .Name("divisionDropdowntree")
+                        .AutoClose(false).CheckAll(false)
+                        .Checkboxes(checkboxes => checkboxes
+                        .Name("checkedFiles")
+                        .CheckChildren(true)).Value("1").ValueTemplate("<text>Multiple Locations</text>").HtmlAttributes(new { @class = "nav-supplier-dropdown icon-placeholder" })
+                        .Placeholder("Select Division/ Location").DataTextField("PARKER_DIV_NAME").DataValueField("PARKER_DIV_ID")
+                        .DataSource(source =>
+                        {
+                            source.Read(read => { read.Action("GetDivisionLocation", "Home").Data("additionalInfo");
+                            });
+                        })
+                        
+                        )*@
+
+                            @*.Items(dropdowntree =>
+                            {
+                            dropdowntree.Add().Text("Gas Turbine Fuel Systems").Id("1")
+                            .SpriteCssClasses("rootfolder")
+                            .Expanded(false)
+                            .Items(root =>
+                            {
+                            root.Add().Text("Clyde, NY").Id("2");
+                            root.Add().Text("Devens, MA").Id("3");
+                            root.Add().Text("Glendale, AZ").Id("4");
+                            root.Add().Text("Liberty Lake, WA").Id("5");
+                            root.Add().Text("Glendale, AZ").Id("6");
+                            root.Add().Text("Mentor, OH").Id("7");
+                            root.Add().Text("Mt.Holly, SC").Id("8");
+                            root.Add().Text("Naples, FL").Id("9");
+                            });
+                            dropdowntree.Add().Text("Fluid Controls Europe - Gessate").Id("10")
+                            .SpriteCssClasses("rootfolder")
+                            .Expanded(false)
+                            .Items(root =>
+                            {
+                            root.Add().Text("Creteil, France").Id("11");
+                            root.Add().Text("Fcde Chomutov, CZR").Id("12");
+                            root.Add().Text("Heilbronn, Germany").Id("13");
+                            root.Add().Text("Geneva, Switzerland").Id("14");
+                            root.Add().Text("Gessate, Italy").Id("15");
+                            root.Add().Text("Koeln, Germany").Id("16");
+                            root.Add().Text("Milton Keynes, United Kingdom").Id("17");
+                            root.Add().Text("RACE Padova, Italy (Closed)").Id("18");
+                            root.Add().Text("Rotherham, UK (RACE)").Id("19");
+                            });
+                            dropdowntree.Add().Text("Taiyo Hydraulics, Japan").Id("20")
+                            .SpriteCssClasses("rootfolder")
+                            .Expanded(false)
+                            .Items(root =>
+                            {
+                            root.Add().Text("Nara, Japan").Id("21");
+                            root.Add().Text("Osaka, Japan").Id("22");
+                            root.Add().Text("Osaka Sales, Japan").Id("23");
+                            root.Add().Text("Osaka System, Japan").Id("24");
+                            root.Add().Text("Osaka S&E, Japan").Id("25");
+                            root.Add().Text("Mentor, OH").Id("26");
+                            root.Add().Text("Tsukuba, Japan").Id("27");
+                            root.Add().Text("Yamaguchi, Japan").Id("28");
+                            });
+                            })*@
+                        </div>
+                        <small id="emailHelp" class="form-text text-muted">&nbsp;</small>
+                    </div>
+                </li>
+            </ul>
+            <div class="d-flex justify-content-center flexbox flex-1">
+                <!-- START TOP-LEFT TOOLBAR-->
+                <ul class="nav navbar-toolbar"></ul>
+                <!-- END TOP-LEFT TOOLBAR-->
+                <!-- START TOP-RIGHT TOOLBAR-->
+                <ul class="nav navbar-toolbar nav-action-icons user-action-icons">
+                    @*<li class="dropdown dropdown-inbox">
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-bell-o"></i>
+                                    <span class="badge badge-primary envelope-badge">9</span>
+                                </a>
+                            <ul class="dropdown-menu dropdown-menu-right dropdown-menu-media">
+                                <li class="dropdown-menu-header">
+                                    <div>
+                                        <span><strong>9 New</strong> Messages</span>
+                                        <a class="pull-right" href="mailbox.html">view all</a>
+                                    </div>
+                                </li>
+                                <li class="list-group list-group-divider scroller" data-height="240px" data-color="#71808f">
+                                    <div>
+                                        <a class="list-group-item">
+                                            <div class="media">
+                                                <div class="media-img">
+                                                </div>
+                                                <div class="media-body">
+                                                    <div class="font-strong"> </div>Jeanne Gonzalez<small class="text-muted float-right">Just now</small>
+                                                    <div class="font-13">Your proposal interested me.</div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="list-group-item">
+                                            <div class="media">
+                                                <div class="media-img">
+                                                </div>
+                                                <div class="media-body">
+                                                    <div class="font-strong"></div>Becky Brooks<small class="text-muted float-right">18 mins</small>
+                                                    <div class="font-13">Lorem Ipsum is simply.</div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="list-group-item">
+                                            <div class="media">
+                                                <div class="media-img">
+                                                </div>
+                                                <div class="media-body">
+                                                    <div class="font-strong"></div>Frank Cruz<small class="text-muted float-right">18 mins</small>
+                                                    <div class="font-13">Lorem Ipsum is simply.</div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a class="list-group-item">
+                                            <div class="media">
+                                                <div class="media-img">
+                                                </div>
+                                                <div class="media-body">
+                                                    <div class="font-strong"></div>Rose Pearson<small class="text-muted float-right">3 hrs</small>
+                                                    <div class="font-13">Lorem Ipsum is simply.</div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>*@
+
+                    <li class="dropdown dropdown-user">
+                        <a class="nav-link dropdown-toggle link" data-toggle="dropdown">
+                            <!--                            <img src="./assets/img/admin-avatar.png" />-->
+                            <span></span><i class="fa fa-user">&nbsp;</i><i class="fa fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li> <a class="dropdown-item" href="#"><i class="fa fa-user"></i> Update Profile</a></li>
+                            <li class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#"><i class="fa fa-power-off"></i>Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <!-- END TOP-RIGHT TOOLBAR-->
+            </div>
+        </header>
+        <!-- END HEADER-->
+        <!-- START SIDEBAR-->
+        <nav class="page-sidebar" id="sidebar">
+            <div id="sidebar-collapse">
+                <ul class="side-menu metismenu">
+                    <li>
+                        <a href="javascript:;" class="arrow_box">
+                            <i class="sidebar-item-icon fa fa-edit"></i>
+                            <span class="nav-label">Order Fulfillment</span><i class="fa fa-caret-left arrow"></i>
+                        </a>
+                        <ul class="nav-2-level collapse">
+                            <li>
+                                <a href="">Forecasts</a>
+                            </li>
+                            <li>
+                                <a href="">Inventory Management</a>
+                            </li>
+                            <li>
+                                <a href="">Kanban</a>
+                            </li>
+                            <li>
+                                <a href="">Materical Release</a>
+                            </li>
+                            <li>
+                                <a href="">Review Your Orders</a>
+                            </li>
+                            <li>
+                                <a href="">Schedules</a>
+                            </li>
+                            <li>
+                                <a href="">Supplier Alerts</a>
+                            </li>
+                            <li>
+                                <a href="">Request for Quote</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <i class="sidebar-item-icon fa fa-line-chart"></i>
+                            <span class="nav-label">Supplier Performance</span><i class="fa fa-caret-left arrow"></i>
+                        </a>
+                        <ul class="nav-2-level collapse">
+                            <li>
+                                <a href="">Continuous Improvement</a>
+                            </li>
+                            <li>
+                                <a href="" target="iFrame-window">Supplier Metrics</a>
+                            </li>
+                            <li>
+                                <a href="http://example.com/" target="iFrame-window" id="app-menu-links">SCARs</a>
+                            </li>
+                            <li>
+                                <a href="Phc_WALT" target="iFrame-window">WALT</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <i class="sidebar-item-icon fa fa-truck fa-rotate-90 fa-flip-horizontal"></i>
+                            <span class="nav-label ship-label">Shipping</span><i class="fa fa-caret-left arrow"></i>
+                        </a>
+                        <ul class="nav-2-level collapse">
+                            <li>
+                                <a href="">ASN History</a>
+                            </li>
+                            <li>
+                                <a href="">Supplier Routing Instructions</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <i class="sidebar-item-icon fa fa-address-card-o"></i>
+                            <span class="nav-label">Supplier Qualification</span><i class="fa fa-caret-left arrow"></i>
+                        </a>
+                        <ul class="nav-2-level collapse">
+                            <li>
+                                <a href="">Supplier Qualification System</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <i class="sidebar-item-icon fa fa-bookmark"></i>
+                            <span class="nav-label">References</span><i class="fa fa-caret-left arrow"></i>
+                        </a>
+                        <ul class="nav-2-level collapse">
+                            <li>
+                                <a href="">Account Status</a>
+                            </li>
+                            <li>
+                                <a href="">Contacts</a>
+                            </li>
+                            <li>
+                                <a href="">Drawings</a>
+                            </li>
+                            <li>
+                                <a href="">Forms and Manuals</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <i class="sidebar-item-icon fa  fa-gear"></i>
+                            <span class="nav-label">Administration</span><i class="fa fa-caret-left arrow"></i>
+                        </a>
+                        <ul class="nav-2-level collapse">
+                            <li>
+                                <a href="">Generic Profile</a>
+                            </li>
+                            <li>
+                                <a href="">Partnership Administration</a>
+                            </li>
+                            <li>
+                                <a href="">Security Administration</a>
+                            </li>
+                            <li>
+                                <a href="">User Administration</a>
+                            </li>
+                        </ul>
+                    </li>
+                    @*<li>
+                            <a href="javascript:;">
+                                <i class="sidebar-item-icon fa fa-user"></i>
+                                <span class="nav-label">My Account</span><i class="fa fa-caret-right arrow"></i>
+                            </a>
+                            <ul class="nav-2-level collapse">
+                                <li>
+                                    <a href="">Update Profile</a>
+                                </li>
+                                <li>
+                                    <a href="">Log off</a>
+                                </li>
+                            </ul>
+                        </li>*@
+                </ul>
+            </div>
+        </nav>
+        <!-- END SIDEBAR-->
+        <div class="content-wrapper">
+
+
+            @RenderBody()
+            <!-- START PAGE CONTENT-->
+            <!-- END PAGE CONTENT-->
+            <footer class="page-footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-6 font-13">
+                            2018 © <b>PARKER HANNIFIN CORP</b> - All rights reserved.
+                        </div>
+                        <div class="col-md-6 ml-auto">
+                            <img src="~/images/Engg.png" class="img-fluid" />
+                        </div>
+                    </div>
+                </div>
+                <a class="px-4" href="" target="_blank"></a>
+                <div class="to-top"><i class="fa fa-arrow-up"></i></div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- BEGIN PAGA BACKDROPS-->
+    <div class="sidenav-backdrop backdrop"></div>
+    <div class="preloader-backdrop">
+        <div class="page-preloader">Loading</div>
+    </div>
+    <!-- END PAGA BACKDROPS-->
+    @*<partial name="_CookieConsentPartial" />*@
+    <script type="text/javascript">
+
+      
+            $(document).ready(function () {
+
+                // create kendoDropDownTree from input HTML element
+                $("#dropdowntree").kendoDropDownTree({
+                    placeholder: "Select ...",
+                    autoWidth: true,
+                    height: "auto",
+                    checkboxes: true,
+                    checkAll: true,
+                    autoClose: false,
+                    //dataSource: response,
+                    //dataTextField: "parkerLocName",
+                    //dataValueField: "parkerDivId"
+                });
+            });
+   
+
+
+      
+
+    </script>
+    <environment include="Development">
+        @* Place Kendo UI scripts after jQuery *@
+        <script type="text/javascript" src="https://localhost:44331/lib/metisMenu/metisMenu.js" asp-append-version="true"></script>
+        <script type="text/javascript" src="https://localhost:44331/lib/jquery-slimscroll/jquery-slimscroll.js" asp-append-version="true"></script>
+        <script type="text/javascript" src="~/js/app.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script type="text/javascript" src="/Phc_Styles/lib/metisMenu/metisMenu.js" asp-append-version="true"></script>
+        <script type="text/javascript" src="/Phc_Styles/lib/jquery-slimscroll/jquery-slimscroll.js" asp-append-version="true"></script>
+        <script type="text/javascript" src="~/js/app.js"></script>
+    </environment>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

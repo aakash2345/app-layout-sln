@@ -1,0 +1,26 @@
+﻿
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<iframe id="iFrame-window" name="iFrame-window"
+        title="Inline Frame Example"
+        class="iframe-conent-wrapper" src="/Phc_WALT" scrolling="no"></iframe>
+
+
+<script type="text/javascript">
+    $("#iFrame-window").css({ height: iframe.$("body").outerHeight() });
+    $("#iFrame-window").load(function () {
+        $(this).height($(this).contents().find("html").height());
+    });
+
+    $("#iFrame-window").on('load', function () {
+
+        var h = $('#iFrame-window').contents().find("body").prop('scrollHeight');
+        var w = $('#iFrame-window').contents().find("body").prop('scrollWidth');
+
+        $('#iFrame-window').height(h);
+        $('#iFrame-window').width(w);
+    })
+</script>
+
+<style type="text/css">
+    
+</style>
